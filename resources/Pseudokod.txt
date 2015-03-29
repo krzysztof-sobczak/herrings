@@ -1,7 +1,9 @@
 Pseudokod.
 
 Krótki opis wstępnych danych.
-Mamy podanych pracowników firmy-liczbę ich oznaczymy przez n, a każdego będziemy oznaczac jednoznacznie przez liczby naturalne z przedziału [1,n]. Dodatkowo dla każdego pracownika mamy podana czesc spolki jaka mu przysluguje i indeks pracownika ktorego sledzi.
+Mamy podanych pracowników firmy-liczbę ich oznaczymy przez n,
+a każdego będziemy oznaczac jednoznacznie przez liczby naturalne z przedziału [1,n].
+Dodatkowo dla każdego pracownika mamy podana czesc spolki jaka mu przysluguje i indeks pracownika ktorego sledzi.
 
 
 Struktura danych bedzie dwuwymiarowa tablica tab.
@@ -10,26 +12,33 @@ tab[i][0]=indeks_prac
 tab[i][1]=czesc_prac
 tab[i][2]=sledz_prac
 
-zbior[][][] \\ deklaracja nowej tablicy ktora bedzie sluzyla przechowywaniu dla kazdego nowego zbioru danych pracownikow spelniajacych warunki zadania.
-for i to h    \\ h to liczba wszystkich mozliwych podzbiorow jakie mozna stworzyc ze zbioru pracownikow.
+// deklaracja nowej tablicy,
+// ktora bedzie sluzyla przechowywaniu dla kazdego nowego zbioru danych pracownikow spelniajacych warunki zadania.
+zbior[][][]
+
+// h to liczba wszystkich mozliwych podzbiorow jakie mozna stworzyc ze zbioru pracownikow.
+for i to h
 
 for k to n
 
 for j to n
 
-if(zbior[i][k][0]==tab[j][2] && zbior[i][0][k]==tab[j][0])   \\sprawdza czy dany pracownik moze byc dodany do danego zbioru.
+// sprawdza czy dany pracownik moze byc dodany do danego zbioru.
+if(zbior[i][k][0]==tab[j][2] && zbior[i][0][k]==tab[j][0])
 
-		for p to n
-		
-		zbior[indeks_nowego_zbioru][p][0]=zbior[i][k][0]	\\tworzy nowy zbior
-		zbior[indeks_nowego_zbioru][0][p]=zbior[i][0][k]
-		 
-		end for
-		
-		zbior[indeks_nowego_zbioru][ind][0]=tab[j][0]	
-		zbior[indeks_nowego_zbioru][0][ind]=tab[j][2]
+    for p to n
 
-		zbior[indeks_nowego_zbioru][0][0]=zbior[i][0][0]+tab[i][1]; \\ dodaje dla nowego zbioru sume poprzedniego zbioru z czescia spolki nowego pracownika.
+    //tworzy nowy zbior
+    zbior[indeks_nowego_zbioru][p][0]=zbior[i][k][0]
+    zbior[indeks_nowego_zbioru][0][p]=zbior[i][0][k]
+
+    end for
+
+    zbior[indeks_nowego_zbioru][ind][0]=tab[j][0]
+    zbior[indeks_nowego_zbioru][0][ind]=tab[j][2]
+
+    // dodaje dla nowego zbioru sume poprzedniego zbioru z czescia spolki nowego pracownika.
+    zbior[indeks_nowego_zbioru][0][0]=zbior[i][0][0]+tab[i][1];
 
 end if
 
@@ -38,11 +47,14 @@ end for
 
 for i to h
 
-if (zbior[i][0][0]>max)   \\dla wszystkich wyliczonych zbiorow szuka maksymalna sume czesci spolki jaka maja pracownicy.
+// dla wszystkich wyliczonych zbiorow szuka maksymalna sume czesci spolki jaka maja pracownicy.
+if (zbior[i][0][0]>max)
 
 max=zbior[i][0][0]
 indeks_max=i
 
 end for
 
-return max, zbior[indeks_max]  \\algorytm zwraca najwieksza sume spolki jaka zawiera zbior pracownikow ze spelnionymi warunkami zadania, oraz ich indeksy.
+// algorytm zwraca najwieksza sume spolki jaka zawiera zbior pracownikow ze spelnionymi warunkami zadania,
+// oraz ich indeksy.
+return max, zbior[indeks_max]
