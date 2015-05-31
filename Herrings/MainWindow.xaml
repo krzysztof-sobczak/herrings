@@ -1,0 +1,18 @@
+﻿<Window x:Class="Herrings.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="423.092" Width="1123.795">
+    <Grid>
+        <Button Name="CsvPicker" Content="Choose data file..." HorizontalAlignment="Left" Margin="894,271,0,0" VerticalAlignment="Top" Width="190" Height="24" Click="CsvPicker_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="HERRINGS" VerticalAlignment="Top" Height="35" Width="1096" TextAlignment="Center" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="894,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="216" Width="190"><Run Text="Instructions"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run Text="In order to get"/><Run Text=" list of"/><Run Text=" independent shareholders with highest share "/><LineBreak/><Run Text="in corporation please provide CSV data file with corporation structure."/><LineBreak/><Run/><LineBreak/><Run Text="Valid CSV format"/><Run Text=":"/><LineBreak/><Run/><LineBreak/><Run Text="&quot;Id&quot;,&quot;Name&quot;,&quot;Share&quot;,&quot;SpyId&quot;"/><LineBreak/><Run Text="1,&quot;Tom&quot;,&quot;3&quot;,&quot;&quot;"/><LineBreak/><Run Text="2,&quot;John&quot;,&quot;2&quot;,&quot;1&quot;"/><LineBreak/><Run Text="...."/></TextBlock>
+        <ScrollViewer HorizontalAlignment="Left" Margin="34,82,0,0" VerticalAlignment="Top" Height="300" Width="414" >
+            <TextBlock x:Name="Structure" Text="" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" Width="414"/>
+        </ScrollViewer>
+        <TextBlock HorizontalAlignment="Left" Margin="34,50,0,0" TextWrapping="Wrap" Text="Corporation structure" VerticalAlignment="Top" Height="27" Width="414"/>
+        <ScrollViewer HorizontalAlignment="Left" Margin="453,82,0,0" VerticalAlignment="Top" Height="300" Width="436" >
+            <TextBlock x:Name="Results" Text="" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" Width="436"/>
+        </ScrollViewer>
+        <TextBlock HorizontalAlignment="Left" Margin="453,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="436" Text="Independet shareholders with highest share"/>
+    </Grid>
+</Window>
