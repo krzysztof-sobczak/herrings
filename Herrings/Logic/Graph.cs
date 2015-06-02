@@ -40,6 +40,9 @@ namespace Herrings.Logic
             set { verticeEdges = value; }
         }
 
+        private List<T> visitedVertices;
+        private Dictionary<int, List<T>> notVisitedEdges;
+
         public Graph() {
             Vertices = new List<T>();
             VerticeEdges = new Dictionary<int, List<T>>();
@@ -127,16 +130,122 @@ namespace Herrings.Logic
             {
                 T vertice = _vertices[0];
                 _vertices.RemoveRange(0,1);
-                Tree<T> tree = new Tree<T>(this, vertice);
-                KeyValuePair<float, List<T>> maxSet = tree.getMaxIndependentSet(checkCycles);
+                KeyValuePair<float, List<T>> maxSet = new KeyValuePair<float, List<T>>();
+                if(checkCycles)
+                {
+                    List<Graph<T>> graphs = getGraphsWithoutCycle(vertice);
+                    foreach (Graph<T> graph in graphs)
+                    {
+                        foreach (T visitedVertice in graph.Vertices)
+                        {
+                            _vertices.Remove(visitedVertice);
+                        }
+                    }
+                    if (graphs.Count == 1)
+                    {
+                        maxSet = graphs[0].getMaxIndependentSet();
+                    }
+                    else
+                    {
+                        maxSet = getMaxKeyValuePair(graphs[0].getMaxIndependentSet(), graphs[1].getMaxIndependentSet());
+                    }
+                }
+                else
+                {
+                    Tree<T> tree = new Tree<T>(this, vertice);
+                    maxSet = tree.getMaxIndependentSet();
+                    foreach (T visitedVertice in tree.AllVisitedVertices)
+                    {
+                        _vertices.Remove(visitedVertice);
+                    }
+                }
                 maxIndependentSetSum += maxSet.Key;
                 maxIndependentSetMembers.AddRange(maxSet.Value);
-                foreach (T visitedVertice in tree.AllVisitedVertices)
-                {
-                    _vertices.Remove(visitedVertice);
-                }
             }
             return new KeyValuePair<float, List<T>>(maxIndependentSetSum, maxIndependentSetMembers);
+        }
+
+        public static KeyValuePair<float, List<T>> getMaxKeyValuePair(KeyValuePair<float, List<T>> kvp1, KeyValuePair<float, List<T>> kvp2)
+        {
+            if (kvp1.Key >= kvp2.Key)
+            {
+                return kvp1;
+            }
+            else
+            {
+                return kvp2;
+            }
+        }
+
+        public List<Graph<T>> getGraphsWithoutCycle(T _vertice)
+        {
+            T verticeInCycle = findVerticeInCycle(_vertice, true);
+            Graph<T> visitedGraph = this.clone();
+            visitedGraph.Vertices = visitedVertices;
+            visitedGraph.removeNotExistingEdges();
+            if (verticeInCycle == null)
+            {
+                return new List<Graph<T>>() { visitedGraph };
+            }
+            // split tree into to separate graphs via found vertice
+            Graph<T> graphExcludingVertice = visitedGraph.clone();
+            graphExcludingVertice.Vertices.Remove(verticeInCycle);
+            graphExcludingVertice.removeNotExistingEdges();
+
+            Graph<T> graphIncludingVertice = visitedGraph.clone();
+            foreach (T vertice in this.VerticeEdges[verticeInCycle])
+            {
+                graphIncludingVertice.Vertices.Remove(vertice);
+            }
+            graphIncludingVertice.removeNotExistingEdges();
+
+            return new List<Graph<T>>() { graphIncludingVertice, graphExcludingVertice };
+        }
+
+        private T findVerticeInCycle(T vertice, bool init = false)
+        {
+            if (init)
+            {
+                visitedVertices = new List<T>();
+                notVisitedEdges = new Dictionary<int, List<T>>();
+                foreach (var key in this.VerticeEdges.Keys)
+                {
+                    notVisitedEdges.Add(key, new List<T>(this.VerticeEdges[key]));
+                }
+            }
+            if (isVisited(vertice))
+            {
+                return vertice;
+            }
+            else
+            {
+                visitedVertices.Add(vertice);
+            }
+            List<T> _notVisitedEdges = (notVisitedEdges.Keys.Contains(vertice)) ? new List<T>(notVisitedEdges[vertice]) : new List<T>();
+            if (_notVisitedEdges.Count > 0)
+            {
+                T result = null;
+                foreach (T child in _notVisitedEdges)
+                {
+                    // each edge is double stored for both vertices
+                    // remove both
+                    notVisitedEdges[child].Remove(vertice);
+                    notVisitedEdges[vertice].Remove(child);
+                    // search child
+                    T childResponse = findVerticeInCycle(child);
+                    if (childResponse != null)
+                    {
+                        result = childResponse;
+                    }
+                }
+                return result;
+            }
+            return null;
+        }
+
+        private bool isVisited(T vertice)
+        {
+            return visitedVertices.Contains(vertice);
         }
 
         public void removeNotExistingEdges()

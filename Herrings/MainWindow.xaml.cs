@@ -29,7 +29,7 @@ namespace Herrings
         {
             InitializeComponent();
             Corporation corporation = new Corporation();
-            loadCorporation(corporation);
+            //loadCorporation(corporation);
         }
 
         private void CsvPicker_Click(object sender, RoutedEventArgs e)
