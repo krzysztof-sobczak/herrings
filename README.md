@@ -11,5 +11,5 @@ rozwiązuje powyższy problem.
 # How to run
 
 1. Open ./dist directory
-2. Run herrings.exe
+2. Run Herrings.exe
 3. Follow the instructions
